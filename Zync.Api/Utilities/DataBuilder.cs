@@ -1,4 +1,7 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using MongoDB.Bson;
+using System.Globalization;
+using System.Reflection;
 using Zync.Api.Models.Output;
 
 namespace Zync.Api.Utilities
@@ -6,19 +9,21 @@ namespace Zync.Api.Utilities
     public class DataBuilder
     {
         public BsonDocument document = new BsonDocument();
+        public Type modelType = typeof(string);
         public DataBuilder(BsonDocument document) { 
             this.document = document;
         }
         private dynamic buildValue(dynamic input, string name)
         {
+            Console.WriteLine("-> "+name+": ");
+
             if (input.Contains(name))
             {
-                Type type = input.GetElement(name).Value.GetType();
-                string typeName = type.Name;
-                //Console.WriteLine("Input is " + name + " (" + typeName + ") from: ");
-                //Console.WriteLine(input.GetElement(name));
-
-                switch (typeName)
+                Type inputType = input.GetElement(name).Value.GetType();
+                string inputTypeName = inputType.Name;
+                Console.WriteLine("Input is " + name + " (" + inputTypeName + ") from: ");
+                Console.WriteLine(input.GetElement(name));
+                switch (inputTypeName)
                 {
                     case "BsonObjectId":
                         BsonObjectId idValue = input.GetElement(name).Value;
@@ -51,21 +56,37 @@ namespace Zync.Api.Utilities
                     case "BsonInt32":
                         return input.GetElement(name).Value.AsInt32;
                         break;
+                    case "BsonNull":
+                        return null;
                     case "bool":
                         return input.GetElement(name).Value.AsBoolean;
                         break;
                     default:
                         return input.GetElement(name).Value;
-
                         break;
                 }
             }
             else
             {
-                //Console.WriteLine("Not found");
-                return "";
-            }
+                string propertyName = name.StartsWith("_") ? char.ToUpper(name[1]) + name.Substring(2) : char.ToUpper(name[0]) + name.Substring(1);
+                Console.WriteLine(propertyName);
+                PropertyInfo propertyInfo = this.modelType.GetProperty(propertyName);
+                Type outputType = propertyInfo.PropertyType;
+                string outputTypeName = outputType.Name;
 
+                Console.WriteLine("Is " + outputTypeName);
+
+                switch (outputTypeName)
+                {
+                    case "Int32":
+                        return 0;
+                    case "String":
+                        return "";
+                    case "Boolean":
+                        return false;
+                }
+            }
+            return null;
         }
         private Style buildStyle(BsonDocument input)
         {
@@ -146,6 +167,7 @@ namespace Zync.Api.Utilities
         public Creative buildCreative()
         {
             Creative creative = new Creative();
+            this.modelType = typeof(Creative);
             creative.ID = buildValue(this.document, "_id");
             creative.CreatedAt = buildValue(this.document, "createdAt");
             creative.UpdatedAt = buildValue(this.document, "updatedAt");
@@ -166,6 +188,22 @@ namespace Zync.Api.Utilities
                 creative.Slides.Add(buildSlide(item));
             }
             return creative;
+        }
+
+        public Campaign buildCampaign()
+        {
+            Campaign campaign = new Campaign();
+            this.modelType = typeof(Campaign);
+            campaign.ID = buildValue(this.document, "_id");
+            campaign.CreatedAt = buildValue(this.document, "createdAt");
+            campaign.UpdatedAt = buildValue(this.document, "updatedAt");
+            campaign.Name = buildValue(this.document, "name");
+            campaign.StartDate = buildValue(this.document, "startDate");
+            campaign.EndDate = buildValue(this.document, "endDate");
+            campaign.Advertiser = buildValue(this.document, "advertiser");
+            campaign.Week = buildValue(this.document, "week");
+            campaign.OrderAida = buildValue(this.document, "orderAida");
+            return campaign;
         }
     }
 }

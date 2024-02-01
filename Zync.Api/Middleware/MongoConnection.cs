@@ -8,23 +8,25 @@ namespace Zync.Api.Middleware
     public class MongoConnection
     {
         public string country { get; set; }
+        public MongoClient mongoClient = new MongoClient();
         public BsonDocument currentDocument { get; set; }
 
         public MongoConnection(string country)
         {
             this.country = country;
+            var configBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .Build();
+            var connectionString = configBuilder.GetConnectionString(country);
+            this.mongoClient = new MongoClient(connectionString);
         }
 
 
         public Creative filterCreativeById(string creativeId)
         {
-            var configBuilder = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .Build();
-            var connectionString = configBuilder.GetConnectionString(country);
-            MongoClient mongoClient = new MongoClient(connectionString);
-            var mongoDatabase = mongoClient.GetDatabase("creatividades");
+
+            var mongoDatabase = this.mongoClient.GetDatabase("creatividades");
             var mongoCollection = mongoDatabase.GetCollection<BsonDocument>("creativities");
             var objectIdToFind = creativeId.All(c => char.IsDigit(c) || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F') ? new ObjectId(creativeId) : new ObjectId();
             var filter = Builders<BsonDocument>.Filter.Eq("_id", objectIdToFind);
@@ -44,6 +46,30 @@ namespace Zync.Api.Middleware
                 foundDocument["_result"] = "1 creative found";
             }
             return creative;
+        }
+
+        public Campaign filterCampaignById(string campaignId)
+        {
+            var mongoDatabase = this.mongoClient.GetDatabase("creatividades");
+            var mongoCollection = mongoDatabase.GetCollection<BsonDocument>("campaigns");
+            var objectIdToFind = campaignId.All(c => char.IsDigit(c) || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F') ? new ObjectId(campaignId) : new ObjectId();
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", objectIdToFind);
+            var results = mongoCollection.Find(filter).ToList();
+            var foundDocument = new BsonDocument();
+            Campaign campaign = new Campaign();
+            if (results.Count == 0)
+            {
+                foundDocument["_id"] = new ObjectId();
+                foundDocument["_result"] = "No creatives found";
+            }
+            else
+            {
+                foundDocument = mongoCollection.Find(filter).FirstOrDefault();
+                DataBuilder builder = new DataBuilder(foundDocument);
+                campaign = builder.buildCampaign();
+                foundDocument["_result"] = "1 creative found";
+            }
+            return campaign;
         }
     }
 }
