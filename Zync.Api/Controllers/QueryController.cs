@@ -16,11 +16,13 @@ namespace Zync.API.Controllers
             Creative document = connection.filterCreativeById(creativeId);
             return Ok(document);
         }
-    }
 
+
+    }
     [Route("api/[controller]")]
     public class QueryCampaignController : ControllerBase
     {
+
         [HttpGet(Name = "queryCampaign")]
         public IActionResult queryCampaign([FromQuery] string campaignId)
         {
