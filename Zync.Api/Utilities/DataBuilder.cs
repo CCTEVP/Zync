@@ -21,8 +21,8 @@ namespace Zync.Api.Utilities
             {
                 Type inputType = input.GetElement(name).Value.GetType();
                 string inputTypeName = inputType.Name;
-                Console.WriteLine("Input is " + name + " (" + inputTypeName + ") from: ");
-                Console.WriteLine(input.GetElement(name));
+                //Console.WriteLine("Input is " + name + " (" + inputTypeName + ") from: ");
+                //Console.WriteLine(input.GetElement(name));
                 switch (inputTypeName)
                 {
                     case "BsonObjectId":
@@ -45,25 +45,19 @@ namespace Zync.Api.Utilities
                         {
                             return input.GetElement(name).Value.AsBsonDocument;
                         }
-                        break;
                     case "BsonArray":
                         return input.GetElement(name).Value.AsBsonArray;
-                        break;
                     case "BsonBoolean":
                         BsonBoolean booleanValue = input.GetElement(name).Value;
                         return booleanValue.AsBoolean;
-                        break;
                     case "BsonInt32":
                         return input.GetElement(name).Value.AsInt32;
-                        break;
                     case "BsonNull":
                         return null;
                     case "bool":
                         return input.GetElement(name).Value.AsBoolean;
-                        break;
                     default:
                         return input.GetElement(name).Value;
-                        break;
                 }
             }
             else
