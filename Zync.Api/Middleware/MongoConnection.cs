@@ -71,5 +71,51 @@ namespace Zync.Api.Middleware
             }
             return campaign;
         }
+        public Format filterFormatById(string formatId)
+        {
+            var mongoDatabase = this.mongoClient.GetDatabase("creatividades");
+            var mongoCollection = mongoDatabase.GetCollection<BsonDocument>("formats");
+            var objectIdToFind = formatId.All(c => char.IsDigit(c) || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F') ? new ObjectId(formatId) : new ObjectId();
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", objectIdToFind);
+            var results = mongoCollection.Find(filter).ToList();
+            var foundDocument = new BsonDocument();
+            Format format = new Format();
+            if (results.Count == 0)
+            {
+                foundDocument["_id"] = new ObjectId();
+                foundDocument["_result"] = "No creatives found";
+            }
+            else
+            {
+                foundDocument = mongoCollection.Find(filter).FirstOrDefault();
+                DataBuilder builder = new DataBuilder(foundDocument);
+                format = builder.buildFormat();
+                foundDocument["_result"] = "1 creative found";
+            }
+            return format;
+        }
+        public Player filterPlayerById(string playerId)
+        {
+            var mongoDatabase = this.mongoClient.GetDatabase("creatividades");
+            var mongoCollection = mongoDatabase.GetCollection<BsonDocument>("players");
+            var objectIdToFind = playerId.All(c => char.IsDigit(c) || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F') ? new ObjectId(playerId) : new ObjectId();
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", objectIdToFind);
+            var results = mongoCollection.Find(filter).ToList();
+            var foundDocument = new BsonDocument();
+            Player player = new Player();
+            if (results.Count == 0)
+            {
+                foundDocument["_id"] = new ObjectId();
+                foundDocument["_result"] = "No creatives found";
+            }
+            else
+            {
+                foundDocument = mongoCollection.Find(filter).FirstOrDefault();
+                DataBuilder builder = new DataBuilder(foundDocument);
+                player = builder.buildPlayer();
+                foundDocument["_result"] = "1 creative found";
+            }
+            return player;
+        }
     }
 }

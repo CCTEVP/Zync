@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MongoDB.Bson;
+using System;
 using System.Globalization;
 using System.Reflection;
 using Zync.Api.Models.Output;
@@ -10,6 +11,7 @@ namespace Zync.Api.Utilities
     {
         public BsonDocument document = new BsonDocument();
         public Type modelType = typeof(string);
+        public DateTime dateTimeValue;
         public DataBuilder(BsonDocument document) { 
             this.document = document;
         }
@@ -52,6 +54,17 @@ namespace Zync.Api.Utilities
                         return booleanValue.AsBoolean;
                     case "BsonInt32":
                         return input.GetElement(name).Value.AsInt32;
+                    case "BsonDouble":
+                        if (name == "updatedAt")
+                        {
+                            long numericValue = long.Parse(input.GetElement(name).Value.ToString());
+                            dateTimeValue = DateTime.FromFileTimeUtc(numericValue);
+                            return dateTimeValue.ToString();
+                        }
+                        else
+                        {
+                            return input.GetElement(name).Value.AsDouble;
+                        }
                     case "BsonNull":
                         return null;
                     case "bool":
@@ -198,6 +211,80 @@ namespace Zync.Api.Utilities
             campaign.Week = buildValue(this.document, "week");
             campaign.OrderAida = buildValue(this.document, "orderAida");
             return campaign;
+        }
+        public Format buildFormat()
+        {
+            Format format = new Format();
+            this.modelType = typeof(Format);
+            format.ID = buildValue(this.document, "_id");
+            format.CreatedAt = buildValue(this.document, "createdAt");
+            format.UpdatedAt = buildValue(this.document, "updatedAt");
+            format.Name = buildValue(this.document, "name");
+            format.Width = buildValue(this.document, "width");
+            format.Height = buildValue(this.document, "height");
+            format.Group = buildValue(this.document, "group");
+            return format;
+        }
+        public Player buildPlayer()
+        {
+            Player player = new Player();
+            this.modelType = typeof(Player);
+            player.ID = buildValue(this.document, "_id");
+            player.BsPlayerId = buildValue(this.document, "bsPlayerId");
+            player.BsFrameId = buildValue(this.document, "bsFrameId");
+            player.Latitude = buildValue(this.document, "latitude");
+            player.Longitude = buildValue(this.document, "longitude");
+            player.City = buildValue(this.document, "city");
+            player.Country = buildValue(this.document, "country");
+            player.PlayerName = buildValue(this.document, "playerName");
+            player.DisplayUnitId = buildValue(this.document, "displayUnitId");
+            player.PanelId = buildValue(this.document, "panelId");
+            player.FaceId = buildValue(this.document, "faceId");
+            player.DisplayUnitName = buildValue(this.document, "displayUnitName");
+            player.Status = buildValue(this.document, "status");
+            player.Frames = buildValue(this.document, "frames");
+            player.FrameName = buildValue(this.document, "frameName");
+            player.GeometryType = buildValue(this.document, "geometryType");
+            player.FrameWidth = buildValue(this.document, "frameWidth");
+            player.FrameHeight = buildValue(this.document, "frameHeight");
+            player.Community = buildValue(this.document, "community");
+            player.Province = buildValue(this.document, "province");
+            player.Zone = buildValue(this.document, "zone");
+            player.District = buildValue(this.document, "district");
+            player.Neightborhood = buildValue(this.document, "neightborhood");
+            player.Address = buildValue(this.document, "address");
+            player.Street = buildValue(this.document, "street");
+            player.StreetNumber = buildValue(this.document, "streetNumber");
+            player.PostalCode = buildValue(this.document, "postalCode");
+            player.Format = buildValue(this.document, "format");
+            player.Furniture = buildValue(this.document, "furniture");
+            player.Connect = buildValue(this.document, "connect");
+            player.BusStation = buildValue(this.document, "busStation");
+            player.TrainStation = buildValue(this.document, "trainStation");
+            player.SubwayStation = buildValue(this.document, "subwayStation");
+            player.PlayerClass = buildValue(this.document, "playerClass");
+            player.TrafficOrigin = buildValue(this.document, "trafficOrigin");
+            player.TrafficDestination = buildValue(this.document, "trafficDestination");
+            player.TrafficBMFast = buildValue(this.document, "trafficBMFast");
+            player.TrafficBMNormal = buildValue(this.document, "trafficBMNormal");
+            player.TrafficBMSlow = buildValue(this.document, "trafficBMSlow");
+            player.WifiProbesGroup = buildValue(this.document, "wifiProbesGroup");
+            player.LanguageFR = buildValue(this.document, "languageFR");
+            player.LanguageNL = buildValue(this.document, "languageNL");
+            player.Geohash = buildValue(this.document, "geohash");
+            player.AffluenceSiteId = buildValue(this.document, "affluenceSiteId");
+            player.SonataLocation = buildValue(this.document, "sonataLocation");
+            player.AppcelerateLocation = buildValue(this.document, "appcelerateLocation");
+            player.Group = buildValue(this.document, "group");
+            player.BusStopName = buildValue(this.document, "busStopName");
+            player.BusStopId = buildValue(this.document, "busStopId");
+            player.ClientId = buildValue(this.document, "clientId");
+            player.UpdatedAt = buildValue(this.document, "updatedAt");
+            player.BusStopPanel = buildValue(this.document, "busStopPanel");
+            player.Name = buildValue(this.document, "name");
+            player.FrameId = buildValue(this.document, "frameId");
+
+            return player;
         }
     }
 }
