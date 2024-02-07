@@ -1,5 +1,11 @@
 ﻿namespace Zync.Api.Models.Output
 {
+
+    public class Players
+    {
+        public List<Player> PlayersList { get; set; } = new List<Player>();
+    }
+
     public class Player
     {
         public string ID { get; set; }

@@ -40,7 +40,7 @@ namespace Zync.API.Controllers
     {
 
         [HttpGet(Name = "queryFormat")]
-        public IActionResult queryCampaign([FromQuery] string formatId)
+        public IActionResult queryFormat([FromQuery] string formatId)
         {
             Response.ContentType = "application/json";
             MongoConnection connection = new MongoConnection("Spain");
@@ -55,7 +55,7 @@ namespace Zync.API.Controllers
     {
 
         [HttpGet(Name = "queryPlayer")]
-        public IActionResult queryCampaign([FromQuery] string playerId)
+        public IActionResult queryPlayer([FromQuery] string playerId)
         {
             Response.ContentType = "application/json";
             MongoConnection connection = new MongoConnection("Spain");
@@ -64,5 +64,31 @@ namespace Zync.API.Controllers
         }
 
     }
+
+    //[Route("api/[controller]")]
+    //public class QueryPlayersController : ControllerBase
+    //{
+
+    //    [HttpGet(Name = "queryPlayers")]
+
+    //    public IEnumerable<Players> queryPlayersList()
+    //    {
+    //        Response.ContentType = "application/json";
+    //        MongoConnection connection = new MongoConnection("Spain");
+    //        Players document = connection.getAllPlayers();
+    //        return Ok(document);
+    //    }
+
+
+
+    //    public IActionResult queryPlayersList()
+    //    {
+    //        Response.ContentType = "application/json";
+    //        MongoConnection connection = new MongoConnection("Spain");
+    //        Players document = connection.getAllPlayers();
+    //        return Ok(document);
+    //    }
+
+    //}
 
 }

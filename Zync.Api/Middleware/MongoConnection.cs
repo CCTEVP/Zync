@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Numerics;
 using Zync.Api.Models.Output;
 using Zync.Api.Utilities;
 
@@ -116,6 +117,41 @@ namespace Zync.Api.Middleware
                 foundDocument["_result"] = "1 creative found";
             }
             return player;
+        }
+
+        public Players getAllPlayers()
+        {
+            var mongoDatabase = this.mongoClient.GetDatabase("creatividades");
+            var mongoCollection = mongoDatabase.GetCollection<BsonDocument>("players");
+            var filter = Builders<BsonDocument>.Filter.Ne("_id", "");
+            //var results = mongoCollection.Find(FilterDefinition<BsonDocument>.Empty).ToList();
+            var results = mongoCollection.Find(filter).ToList();
+            Console.WriteLine(results.Count);
+
+            foreach (BsonDocument document in results)
+            {
+                Console.WriteLine(document.GetElement("name").Value.ToString());
+            }
+
+
+            //var foundDocument = new BsonDocument();
+            Players playersList = new Players();
+
+            /*
+            if (results.Count == 0)
+            {
+                //foundDocument["_id"] = new ObjectId();
+                //foundDocument["_result"] = "No creatives found";
+            }
+            else
+            {
+                //foundDocument = mongoCollection.Find(filter).FirstOrDefault();
+                DataBuilder builder = new DataBuilder(results);
+                playersList = builder.buildPlayerList();
+                //foundDocument["_result"] = "1 creative found";
+            }
+            */
+            return playersList;
         }
     }
 }
