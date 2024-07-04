@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "E:\\Development\\Web\\DOTNET\\Zync\\Zync.Builder\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Zync.Builder.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Zync.Builder.bundle.scp.css"
+    },
+    {
+      "Id": "E:\\Development\\Web\\DOTNET\\Zync\\Zync.Builder\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "E:\\Development\\Web\\DOTNET\\Zync\\Zync.Builder\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "E:\\Development\\Web\\DOTNET\\Zync\\Zync.Builder\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "E:\\Development\\Web\\DOTNET\\Zync\\Zync.Builder\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Zync.Builder.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Zync.Builder.props",
+      "PackagePath": "build\\Zync.Builder.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Zync.Builder.props",
+      "PackagePath": "buildMultiTargeting\\Zync.Builder.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Zync.Builder.props",
+      "PackagePath": "buildTransitive\\Zync.Builder.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
