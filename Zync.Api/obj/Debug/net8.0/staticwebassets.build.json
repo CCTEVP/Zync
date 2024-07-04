@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "sO+Cn7B23lv36g55Wc1LPs6/a+5ipztdPgcIE/vjmF8=",
+  "Source": "Zync.Api",
+  "BasePath": "_content/Zync.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
